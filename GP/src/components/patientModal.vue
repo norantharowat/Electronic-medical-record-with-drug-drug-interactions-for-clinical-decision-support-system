@@ -575,7 +575,7 @@
                     .create({
                         cssClass: 'alert',
                         header: 'Alert',
-                        // subHeader: 'Subtitle',
+
                         message: msg,
                         buttons: ['OK'],
                     });
@@ -583,7 +583,7 @@
             },
 
             chooseMedication(item){
-                console.log(item);
+
                 this.PatientInfo['Medications'].push(item);
                 this.menuOpen = false;
                 this.id='1';
@@ -656,10 +656,9 @@
                         }
                         else if ((this.PI[key] !== this.PatientInfo[key]) && (key !== 'Medications')) {
                             this.newInfo[key] = this.PatientInfo[key];
-                            console.log(this.PI[key] !== this.PatientInfo[key]);
+
                         }
                     }
-                    console.log(this.newInfo);
                     if (complete) {
 
                         if(!this.PatientInfo.phone_number.match(/^\d{11}$/) || (!this.PatientInfo.ssn.match(/^\d{14}$/)) ){
@@ -675,7 +674,7 @@
                                 .then(() => {
 
                                     this.edit = 0;
-                                    console.log(this.edit);
+
                                 })
                                 .catch(error => console.log(error));
 
@@ -683,7 +682,6 @@
                     }
 
                     else {
-                        // alert("Please fill all the fields");
                         this.presentAlert("Please fill all the fields")
 
                     }
@@ -699,7 +697,7 @@
 
                         }
                     }
-                    console.log(this.newMH);
+
                     if (complete) {
 
 
@@ -707,13 +705,12 @@
                             .then(() => {
 
                                 this.edit2 = 0;
-                                console.log(this.edit);
                             })
                             .catch(error => console.log(error));
                     }
 
                     else {
-                        // alert("Please fill all the fields");
+
                         this.presentAlert("Please fill all the fields")
 
                     }

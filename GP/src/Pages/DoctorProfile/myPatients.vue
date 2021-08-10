@@ -29,7 +29,7 @@
 </template>
 <script>
     import { defineComponent } from 'vue';
-    // import MySchedules from './Schedules.vue'
+
     import {
 
         IonCol,
@@ -62,7 +62,7 @@ import PatientCard from "../../components/PatientCard";
         },
         data() {
             return {
-                //icons start
+
                 add,
                 ellipsisHorizontal,
                 ellipsisVertical,
@@ -73,14 +73,15 @@ import PatientCard from "../../components/PatientCard";
                 logOut,
                 closeCircle,
                 img: require("../../../public/logobig.png"),
-                //icons end
+
                 searchQuerywithPhoneNumber: null,
                 searchQuerywithssn:null,
                 DoctorID:null,
                 pa:[],
                 Patients: [],
                 Pvisits:[],
-                all:[]
+                all:[],
+                allvisits:[],
             };
         },
         mounted(){
@@ -104,7 +105,7 @@ import PatientCard from "../../components/PatientCard";
                           last_name : med.last_name,
                           phone_number : (med.phone_number),
                           birth_date : med.birth_date.split('T')[0],
-                          Medications : med.medications.split(','),
+                         Medications :(med.medications) ?  med.medications.split(','):[],
                           gender : med.gender,
                           address : med.address,
                           major_illnesses: med.major_illnesses,
@@ -120,7 +121,9 @@ import PatientCard from "../../components/PatientCard";
 
                   }
                       for (const med of this.pa.visit) {
+
                           if(med.visits && med.diagnosis ){
+
                           this.Pvisits.push({
                               patient_id:med.patient_id,
                               dates:med.visits.split(','),
@@ -129,15 +132,18 @@ import PatientCard from "../../components/PatientCard";
                           }
                       }
                       for(const i in this.Patients ){
-                          if(this.Patients[i].patient_id === this.Pvisits[i].patient_id){
-                        this.all.push({...this.Patients[i],
-                            ...this.Pvisits[i]})}
-                            else{
-                              this.all.push(this.Patients[i])
-                          }
-                          console.log(this.all);
-                      }
+                          this.all.push({...this.Patients[i]});
 
+                            for(const j in this.Pvisits ) {
+                                if (this.Pvisits[j] && this.Patients[i].patient_id === this.Pvisits[j].patient_id) {
+
+                                    this.all[i] = Object.assign(this.all[i], this.Pvisits[j]);
+
+                                }
+                                this.all[i].Medications = [...new Set(this.all[i].Medications)];
+                            }
+
+                      }
 
                 } ).catch((err) => {
                         console.log(err);
@@ -146,7 +152,7 @@ import PatientCard from "../../components/PatientCard";
 
         computed:{
             resultsPatients() {
-                console.log("computing");
+
                 if ( this.searchQuerywithssn) {
                     return this.all.filter((item) => {
 
