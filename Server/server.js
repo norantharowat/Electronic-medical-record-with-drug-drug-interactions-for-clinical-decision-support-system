@@ -2,7 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const app = express();
-
+const PORT = process.env.PORT || 3000
 app.use(cors())
 // app.use(bodyParser.json());
 
@@ -24,16 +24,27 @@ app.use('/', require("./routes/signinPurchase"));
 app.use('/', require("./routes/sendcode"));
 app.use('/', require("./routes/addClinic"));
 app.use('/', require('./routes/index'));
+app.use('/', require('./routes/editProfile'));
+
+app.use('/', require('./routes/allPatients'));
 
 app.use('/', require('./routes/doctorProfile'));
+app.use('/', require('./routes/doctorVisits'));
 app.use('/', require('./routes/secretaryProfile'));
 
 app.use('/', require('./routes/addpatient'));
 
+app.use('/', require('./routes/scheduleVisit'));
+app.use('/', require('./routes/allDoctors'));
+app.use('/', require('./routes/allDoctorsVisits'));
+app.use('/', require('./routes/updatePatient'));
+app.use('/', require('./routes/updateMedicalHistory'));
+
+
 // starting the server
-app.listen(3000, ()=> {
-    console.log('app is running on port 3000');
-  })
+app.listen(PORT, ()=> {
+    console.log('app is running on port' , PORT);
+  });
 
 
 

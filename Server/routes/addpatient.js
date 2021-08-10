@@ -5,6 +5,7 @@ const cors = require('cors');
 const knex = require('../db/config');
 let med=[];
 let m;
+const authenticateToken = require("../middleware/checkAuth");
 
 router.post('/addpatient', async (req, res) => {
 
@@ -16,6 +17,7 @@ router.post('/addpatient', async (req, res) => {
             phone_number: req.body.phoneNumber,
             gender: req.body.gender,
             address: req.body.address,
+            photo: req.body.photo,
             birth_date: req.body.birthdate,
 
 
@@ -24,32 +26,32 @@ router.post('/addpatient', async (req, res) => {
     var medicalHistory =[{
         patient_id :'',
         major_illnesses: req.body.majorillnesses,
-        previous_surgey: req.body.previoussurgery,
-        previous_illnessess: req.body.previousillnesses,
-        diabetes:  new Boolean(req.body.diabetes === 'yes') ? 1 : 0,
+        previous_surgery: req.body.previoussurgery,
+        previous_illnesses: req.body.previousillnesses,
+        diabetes:  (req.body.diabetes === 'yes') ? 1 : 0,
         family_diseases:req.body.familydiseases,
         allergies: req.body.allergies,
-        tobacco: new Boolean(req.body.tobacco === 'yes') ? 1 : 0
+        tobacco: (req.body.tobacco === 'yes') ? 1 : 0
     }];
     try {
         await knex.transaction (async trx => {
             //Insert into login table
+
             const patient_id = await trx('patients')
                 .insert(patient);
             med = req.body.Medications;
             for (m in med) {
                 console.log(m);
-                const addmedication = await trx('drug_products').select("parent_key").where({name: med[m] });
+                const addmedication = await trx('drug_products').select("product_id").where({name: med[m] });
+                console.log(addmedication[0]["product_id"]);
                 let medication = [
                     {
                         patient_id: patient_id[0],
-                        product_id: addmedication[m]["parent_key"],
+                        product_id: addmedication[0]["product_id"],
                         product_name: med[m],
                     }];
                 // medication.product_name = m ;
-                console.log(addmedication[m]["parent_key"]);
                 const add2 = await trx('medications').insert(medication);
-
 
             }
             console.log(patient_id[0]);
@@ -59,7 +61,7 @@ router.post('/addpatient', async (req, res) => {
 
             const medicalhistory = await trx('medical_history')
                 .insert(medicalHistory);
-
+            res.json([]);
         })
     }
     catch (err){
