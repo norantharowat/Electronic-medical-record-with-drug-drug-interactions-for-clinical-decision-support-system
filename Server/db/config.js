@@ -7,8 +7,8 @@ const db=knex({
     client: 'mysql2',
     connection: {
         host: 'eu-cdbr-west-01.cleardb.com',
-        user: 'b37927204c73ea',
-        password: 'ee372baa',
+        user: '...',
+        password: '...',
         database: 'heroku_e70fec14c252d2b'
     }
 });
